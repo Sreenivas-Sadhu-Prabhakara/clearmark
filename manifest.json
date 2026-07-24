@@ -1,0 +1,17 @@
+{
+    "name": "clearmark",
+    "short_name": "clearmark",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#141122",
+    "theme_color": "#3B2E8C",
+    "description": "The weighted-marks final-exam calculator: the exact marks you still need, with internals weighted in.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {"src": "icons/Icon-192.png", "sizes": "192x192", "type": "image/png"},
+        {"src": "icons/Icon-512.png", "sizes": "512x512", "type": "image/png"},
+        {"src": "icons/Icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+        {"src": "icons/Icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+    ]
+}
