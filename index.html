@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="/clearmark/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Work out the exact marks you need on your final exam once your internal/CA marks are weighted in. Enter internals, component weights and a pass or target %, and clearmark tells you the raw marks needed out of 80 (or any total) — or says honestly it is out of reach. Free, private, offline.">
+
+  <meta property="og:title" content="How many marks do you need on the final — with internals weighted in?">
+  <meta property="og:description" content="The weighted-marks final-exam calculator: internals + component weights + a threshold → the exact raw marks you still need. Free and private.">
+  <meta property="og:type" content="website">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="clearmark">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>How Many Marks You Need on the Final (Internals Weighted In) — clearmark</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    :root { color-scheme: light dark; }
+    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+      font-feature-settings: "tnum"; }
+    #seo-landing { max-width: 760px; margin: 0 auto; padding: 24px 20px 8px; line-height: 1.55;
+      color: #1E1A33; background: #F4F1FB; }
+    #seo-landing h1 { font-size: 1.5rem; color: #3B2E8C; margin: 0 0 8px; }
+    #seo-landing h2 { font-size: 1.05rem; margin: 20px 0 6px; }
+    #seo-landing code { background: rgba(59,46,140,0.10); padding: 1px 5px; border-radius: 4px; }
+    .frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle;
+      margin: 0 4px; font-weight: 800; }
+    .frac .bar { height: 3px; width: 100%; min-width: 34px; background: #7A5E14; margin: 2px 0; border-radius: 2px; }
+    .frac .den { font-weight: 600; color: #4B4568; font-size: 0.85em; }
+    #flutter-app { height: 78vh; min-height: 480px; border-top: 3px solid #7A5E14; }
+    @media (prefers-color-scheme: dark) {
+      #seo-landing { color: #ECE8F7; background: #141122; }
+      #seo-landing h1 { color: #B7A6F2; }
+      #seo-landing code { background: rgba(183,166,242,0.16); }
+      .frac .den { color: #A9A2C9; }
+      .frac .bar { background: #D6B85E; }
+    }
+  
+    .app-cta { margin: 18px 0 6px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; }
+    .app-cta a { display:inline-block; background:#3B2E8C; color:#fff; text-decoration:none;
+      font-weight:700; padding:11px 20px; border-radius:8px; font-size:1rem; line-height:1.1; }
+    .app-cta a:hover { filter:brightness(1.08); }
+    .app-cta .note { font-size:0.85rem; opacity:0.82; }
+  </style>
+
+  <!-- Crawlable structured data: the Flutter canvas is not indexable, so the
+       facts live in real HTML + JSON-LD. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "clearmark",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web, Windows, macOS, Linux, Android, iOS",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+    "description": "A weighted-marks final-exam calculator: given internal marks, component weightages and a passing or target threshold, it computes the exact final-exam marks needed — respecting weighted internal/external splits, mark steps and separate theory-paper minimums."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How many marks do I need to pass out of 80?",
+        "acceptedAnswer": { "@type": "Answer", "text": "If the 80-mark paper is the whole grade, 33% of 80 is 26.4, so you need 27 (marks are awarded in whole steps). But most Indian courses weight internal/CA marks in — if your internals already bank enough, you need far less. Example: 16/20 internal at weight 20 plus an 80-mark exam at weight 80, targeting 33% overall, needs only 17 out of 80 on the final. clearmark does this weighted split for you." }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the internal/external weighting work?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Each component contributes (score divided by max) times its weight in percentage points. Those banked points are subtracted from your target, and the remainder is converted to raw exam marks using (target minus earned) divided by exam-weight times exam-max, then rounded up to the mark step. A featured snippet cannot do this because it does not know your internals or weights." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a separate theory-paper minimum, and does clearmark handle it?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Some boards require a minimum on the exam paper itself in addition to the aggregate — e.g. CBSE needs 33% in the theory paper separately. clearmark computes both the aggregate requirement and the paper-minimum requirement and shows you which one binds. When the paper minimum is higher, that becomes the mark you need." }
+      },
+      {
+        "@type": "Question",
+        "name": "Are the CBSE 33% and university 40% pass marks official?",
+        "acceptedAnswer": { "@type": "Answer", "text": "They ship as clause-cited defaults — CBSE 33% from the CBSE Examination Bye-Laws and a 40% norm from a named university ordinance, each shown with its source and a verified-on date. They are starting points, not authority. Your own board circular or university ordinance is the truth; always verify, and edit the preset if your rule differs." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my data private?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The full app is local-first: your subjects live in a SQLite file on your own machine and the app runs on localhost. This web demo stores nothing on any server — everything you type stays in your browser tab." }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <main id="seo-landing">
+    <h1>How many marks do you need on the final — with your internal marks weighted in?</h1>
+    <p><strong>clearmark</strong> takes your internal/CA marks, the component
+    weightages and a pass or target percentage, and tells you the
+    <strong>exact raw marks you still need on the final exam</strong> — or says
+    honestly when the target is out of reach.</p>
+  <div class="app-cta">
+    <a href="mailto:sadhu.sreenivas@gmail.com?subject=Waitlist%3A%20clearmark%20full%20app&body=Please%20notify%20me%20when%20the%20full%20offline%20clearmark%20app%20is%20available.">Get the full app — join the waitlist →</a>
+    <span class="note">Full offline app coming soon. The demo below is free to use now.</span>
+  </div>
+
+
+    <h2>The naive answer, then the real one</h2>
+    <p>“How many marks to pass out of 80?” If the paper were your whole grade,
+    33% of 80 is 26.4, so you would need
+    <span class="frac">27<span class="bar"></span><span class="den">80</span></span>.
+    But Indian courses weight internals in. With <code>16/20</code> internal at
+    weight <code>20</code> and an <code>80</code>-mark exam at weight
+    <code>80</code>, aiming for <code>33%</code> overall, you have already banked
+    16 points — so you only need
+    <span class="frac">17<span class="bar"></span><span class="den">80</span></span>
+    on the final. That weighted split is the thing a search snippet cannot
+    compute; clearmark can.</p>
+
+    <h2>How the weighted split works</h2>
+    <p>Each component banks <code>(score ÷ max) × weight</code> percentage points.
+    The remainder to your target is turned into raw marks:
+    <code>(target − earned) ÷ exam&nbsp;weight × exam&nbsp;max</code>, rounded up
+    to the mark step (1 or ½). Where a board sets a <strong>separate
+    theory-paper minimum</strong> (e.g. CBSE 33% on the paper itself), clearmark
+    computes that too and tells you <strong>which rule binds</strong>.</p>
+
+    <h2>Cited pass-mark defaults</h2>
+    <p>Two clause-cited presets ship as starting points — <strong>CBSE 33%</strong>
+    (CBSE Examination Bye-Laws) and a <strong>University 40%</strong> common norm
+    (a named university ordinance) — each shown with its source and a verified-on
+    date. They are defaults, not authority: verify against your own prospectus or
+    ordinance, and edit the copy if your rule differs.</p>
+
+    <h2>Try it below</h2>
+    <p>The calculator below is loaded with three sample subjects so the answer is
+    non-trivial on first paint. Edit them or add your own — nothing you type
+    leaves this page.</p>
+  </main>
+
+  <div id="flutter-app"></div>
+
+    <script src="flutter.js" defer></script>
+  <!-- buildConfig is injected here at build time from the generated flutter_bootstrap.js
+       (ship-app.sh / build-web.sh). Without it the loader throws "requires _flutter.buildConfig". -->
+  <script>window._flutter=window._flutter||{};_flutter.buildConfig = {"engineRevision":"c416acfeb8126e097f758c664aaa3da929e27da0","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};</script>
+  <script>
+    window.addEventListener("load", function () {
+      _flutter.loader.load({ config: { hostElement: document.getElementById("flutter-app") } });
+    });
+  </script>
+</body>
+</html>
